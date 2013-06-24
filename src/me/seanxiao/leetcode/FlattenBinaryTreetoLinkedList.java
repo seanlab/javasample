@@ -3,37 +3,25 @@ package me.seanxiao.leetcode;
 
 public class FlattenBinaryTreetoLinkedList {
 
-    TreeNode rootNode;
-    
-    TreeNode lastNode;
-    
-    public void flatten(TreeNode root) {
-        if (root == null) {
+    public void flatten(TreeNode current) {
+        if (current == null) {
             return;
         }
-        else {
-            rootNode = null;
-            lastNode = null;
-            root = rootNode;
-        }
-    }
-    
-    public void traverse(TreeNode node) {
-        if (node == null) {
+        if (current.left == null && current.right == null) {
             return;
         }
-        else {
-            if (rootNode == null) {
-                rootNode = new TreeNode(node.val);
-                lastNode = rootNode;
+        else if (current.left != null || current.right != null) {
+            flatten(current.left);
+            flatten(current.right);
+            TreeNode temp = current.left;
+            if (temp != null) {
+                while (temp.right != null) {
+                    temp = temp.right;
+                }
+                temp.right = current.right;
+                current.right = current.left;
+                current.left = null;
             }
-            else {
-                TreeNode newNode = new TreeNode(node.val);
-                lastNode.right = newNode;
-                lastNode = newNode;
-            }
-            traverse(node.left);
-            traverse(node.right);
         }
     }
 }
