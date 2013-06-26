@@ -1,17 +1,33 @@
 package me.seanxiao.leetcode;
 
+import java.util.Arrays;
 import java.util.Stack;
 
 public class ConstructBinaryTreefromPreorderandInorderTraversal {
 
     public static void main(String[] args) {
         ConstructBinaryTreefromPreorderandInorderTraversal obj = new ConstructBinaryTreefromPreorderandInorderTraversal();
-        int[] preorder = {1,2,3};
-        int[] inorder = {2,3,1};
+        int[] preorder = {1, 2, 3};
+        int[] inorder = {3, 2, 1};
         obj.buildTree(preorder, inorder);
     }
-    
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length == 0 || inorder.length == 0) {
+            return null;
+        }
+        for (int i = 0; i < inorder.length; i++) {
+            if (inorder[i] == preorder[0]) {
+                TreeNode node = new TreeNode(preorder[0]);
+                node.left = buildTree(Arrays.copyOfRange(preorder, 1, i + 1), Arrays.copyOfRange(inorder, 0, i));
+                node.right = buildTree(Arrays.copyOfRange(preorder, i + 1, preorder.length), Arrays.copyOfRange(inorder, i + 1, inorder.length));
+                return node;
+            }
+        }
+        return null;
+    }
+
+    public TreeNode buildTree2(int[] preorder, int[] inorder) {
         TreeNode root = null;
         int i = 0;
         int j = 0;
@@ -37,7 +53,7 @@ public class ConstructBinaryTreefromPreorderandInorderTraversal {
                     lastLeftNode.left = currentNode;
                     lastLeftNode = currentNode;
                 }
-                
+
                 nodeStack.push(currentNode);
                 i++;
             }
